@@ -95,22 +95,34 @@ jobs:
 
       - name: Find built plugin (Windows)
         if: runner.os == 'Windows'
-        run: |
-          find build -name "*.vst3" -type f
         shell: bash
+        run: |
+          echo "=== Searching for carouselreverb.vst3 ==="
+          find build -name "carouselreverb.vst3" -type f
+          echo "=== All .vst3 files found ==="
+          find build -name "*.vst3" -type f
+          echo "=== Build directory structure ==="
+          ls -la build/ || echo "build/ not found"
 
       - name: Find built plugin (Unix-like)
         if: runner.os != 'Windows'
-        run: |
-          find build -name "*.vst3" -type f
         shell: bash
+        run: |
+          echo "=== Searching for carouselreverb.vst3 ==="
+          find build -name "carouselreverb.vst3" -type f
+          echo "=== All .vst3 files found ==="
+          find build -name "*.vst3" -type f
+          echo "=== Build directory structure ==="
+          ls -la build/ || echo "build/ not found"
 
-      - name: Upload artifacts
+      - name: Upload our plugin only
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: vst3-plugin-${{ matrix.os }}
-          path: build/**/*.vst3
+          name: carouselreverb-${{ matrix.os }}
+          path: |
+            build/**/carouselreverb.vst3
+            build/**/carouselreverb.vst3/**
           if-no-files-found: warn
           retention-days: 30
 
