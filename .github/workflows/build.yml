@@ -1,0 +1,123 @@
+name: Build VST3 Plugin
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - os: windows-latest
+            build_dir: build
+            artifact: carouselreverb.vst3
+          - os: ubuntu-latest
+            build_dir: build
+            artifact: carouselreverb.vst3
+          - os: macos-latest
+            build_dir: build
+            artifact: carouselreverb.vst3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download VST 3 SDK
+        run: |
+          if [ ! -d "vst3sdk" ]; then
+            git clone https://github.com/steinbergmedia/vst3sdk.git
+            cd vst3sdk
+            git submodule update --init --recursive
+            cd ..
+          fi
+        shell: bash
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            git
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install cmake -y
+        shell: powershell
+
+      - name: Create build directory
+        run: mkdir -p ${{ matrix.build_dir }}
+        shell: bash
+
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cd ${{ matrix.build_dir }}
+          cmake .. -G "Visual Studio 17 2022" -A x64 -DSMTG_SDK_PATH="../vst3sdk"
+        shell: bash
+
+      - name: Configure CMake (Unix-like)
+        if: runner.os != 'Windows'
+        run: |
+          cd ${{ matrix.build_dir }}
+          cmake .. -DSMTG_SDK_PATH="../vst3sdk" -DCMAKE_BUILD_TYPE=Release
+        shell: bash
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cd ${{ matrix.build_dir }}
+          cmake --build . --config Release --parallel
+        shell: bash
+
+      - name: Build (Unix-like)
+        if: runner.os != 'Windows'
+        run: |
+          cd ${{ matrix.build_dir }}
+          cmake --build . --config Release --parallel
+        shell: bash
+
+      - name: Find built plugin (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          find build -name "*.vst3" -type f
+        shell: bash
+
+      - name: Find built plugin (Unix-like)
+        if: runner.os != 'Windows'
+        run: |
+          find build -name "*.vst3" -type f
+        shell: bash
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vst3-plugin-${{ matrix.os }}
+          path: build/**/*.vst3
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-logs-${{ matrix.os }}
+          path: ${{ matrix.build_dir }}
+          retention-days: 7

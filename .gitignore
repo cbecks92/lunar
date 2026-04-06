@@ -1,0 +1,72 @@
+# Git ignore for VST 3 plugin development
+
+# Build directories
+build/
+build-release/
+build-debug/
+cmake-build-*/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.vcxproj.user
+*.sln
+*.vcxproj
+*.filters
+*.cbp
+CMakeUserPresets.json
+
+# Generated files
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Compiled binaries
+*.o
+*.a
+*.lib
+*.dll
+*.dylib
+*.so
+*.vst3
+
+# macOS specific
+.DS_Store
+*.dSYM/
+*.su
+*.gch
+*.pch
+
+# Windows specific
+*.exe
+*.exp
+*.pdb
+Thumbs.db
+
+# Linux specific
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Documentation
+docs/_build/
+site/
+
+# OS files
+.directory
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Dependencies (if using package managers)
+vcpkg_installed/
+conan/
+
+# VST 3 SDK (if cloned locally)
+vst3sdk/
