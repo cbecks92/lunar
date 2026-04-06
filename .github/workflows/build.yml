@@ -69,28 +69,28 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           cd ${{ matrix.build_dir }}
-          cmake .. -G "Visual Studio 17 2022" -A x64 -DSMTG_SDK_PATH="../vst3sdk"
+          cmake .. -G "Visual Studio 17 2022" -A x64 -DSMTG_SDK_PATH="../vst3sdk" --debug-output 2>&1 | tee cmake_config.txt
         shell: bash
 
       - name: Configure CMake (Unix-like)
         if: runner.os != 'Windows'
         run: |
           cd ${{ matrix.build_dir }}
-          cmake .. -DSMTG_SDK_PATH="../vst3sdk" -DCMAKE_BUILD_TYPE=Release
+          cmake .. -DSMTG_SDK_PATH="../vst3sdk" -DCMAKE_BUILD_TYPE=Release --debug-output 2>&1 | tee cmake_config.txt
         shell: bash
 
       - name: Build (Windows)
         if: runner.os == 'Windows'
         run: |
           cd ${{ matrix.build_dir }}
-          cmake --build . --config Release --parallel
+          cmake --build . --config Release --parallel --verbose 2>&1 | tee build_output.txt
         shell: bash
 
       - name: Build (Unix-like)
         if: runner.os != 'Windows'
         run: |
           cd ${{ matrix.build_dir }}
-          cmake --build . --config Release --parallel
+          cmake --build . --config Release --parallel --verbose 2>&1 | tee build_output.txt
         shell: bash
 
       - name: Find built plugin (Windows)
@@ -128,8 +128,14 @@ jobs:
 
       - name: Upload build logs
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: build-logs-${{ matrix.os }}
-          path: ${{ matrix.build_dir }}
+          path: |
+            ${{ matrix.build_dir }}/build_output.txt
+            ${{ matrix.build_dir }}/cmake_config.txt
+            ${{ matrix.build_dir }}/CMakeFiles
+            ${{ matrix.build_dir }}/CMakeOutput.log
+            ${{ matrix.build_dir }}/CMakeError.log
+          if-no-files-found: warn
           retention-days: 7
