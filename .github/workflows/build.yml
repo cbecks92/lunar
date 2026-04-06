@@ -98,22 +98,27 @@ jobs:
         shell: bash
         run: |
           echo "=== Searching for carouselreverb.vst3 ==="
-          find build -name "carouselreverb.vst3" -type f
-          echo "=== All .vst3 files found ==="
-          find build -name "*.vst3" -type f
-          echo "=== Build directory structure ==="
-          ls -la build/ || echo "build/ not found"
+          find build -iname "*carouselreverb*" -type d
+          find build -iname "*carouselreverb*" -type f
+          echo "=== All .vst3 directories found ==="
+          find build -name "*.vst3" -type d 2>/dev/null || echo "No .vst3 directories found"
+          find build -name "*.vst3" -type f 2>/dev/null || echo "No .vst3 files found"
+          echo "=== All plugin files ==="
+          find build -path "*/Contents/*" -o -path "*/Frameworks/*" 2>/dev/null | head -50 || echo "No bundle structure found"
+          echo "=== Entire build directory structure (first 100 lines) ==="
+          find build -type f | head -100
 
       - name: Find built plugin (Unix-like)
         if: runner.os != 'Windows'
         shell: bash
         run: |
           echo "=== Searching for carouselreverb.vst3 ==="
-          find build -name "carouselreverb.vst3" -type f
-          echo "=== All .vst3 files found ==="
-          find build -name "*.vst3" -type f
-          echo "=== Build directory structure ==="
-          ls -la build/ || echo "build/ not found"
+          find build -iname "*carouselreverb*" -type d 2>/dev/null || echo "No directories found"
+          find build -iname "*carouselreverb*" -type f 2>/dev/null || echo "No files found"
+          echo "=== All .vst3 bundles found ==="
+          find build -name "*.vst3" -type d 2>/dev/null || echo "No .vst3 bundles found"
+          echo "=== Build output structure (first 50 items) ==="
+          find build -type f | head -50
 
       - name: Upload our plugin only
         uses: actions/upload-artifact@v4
@@ -121,8 +126,8 @@ jobs:
         with:
           name: carouselreverb-${{ matrix.os }}
           path: |
-            build/**/carouselreverb.vst3
-            build/**/carouselreverb.vst3/**
+            build/**/*.vst3
+            build/**/*.vst3/**
           if-no-files-found: warn
           retention-days: 30
 

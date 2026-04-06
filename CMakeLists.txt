@@ -12,9 +12,6 @@ if(NOT EXISTS "${SMTG_SDK_PATH}/CMakeLists.txt")
     message(FATAL_ERROR "VST 3 SDK not found at ${SMTG_SDK_PATH}")
 endif()
 
-# Configure SDK
-set(SMTG_ENABLE_USE_OF_DEPENDENCY_SYSTEM_LIBRARIES FALSE)
-
 # Add VST3 SDK
 add_subdirectory("${SMTG_SDK_PATH}" vst3sdk)
 
@@ -26,36 +23,22 @@ set(PLUGIN_SOURCES
     src/lfo.cpp
 )
 
-set(PLUGIN_HEADERS
-    include/processor.h
-    include/controller.h
-    include/constants.h
-    include/carousel.h
-    include/lfo.h
+# Create the VST3 plugin using SDK helper function
+smtg_add_vst3plugin(
+    carouselreverb
+    PACKAGE_NAME "Carousel Reverb"
+    SOURCES_LIST ${PLUGIN_SOURCES}
 )
 
-# Use the VST3 SDK's helper to add the plugin
-if(COMMAND smtg_add_vst3_library)
-    message(STATUS "Using SMTG VST3 library helper")
-    
-    smtg_add_vst3_library(
-        TARGET carouselreverb
-        SOURCES ${PLUGIN_SOURCES}
-        HEADERS ${PLUGIN_HEADERS}
-    )
-    
-    # Set plugin output name and location
-    set_target_properties(carouselreverb PROPERTIES
-        OUTPUT_NAME "carouselreverb"
-    )
-else()
-    message(FATAL_ERROR "SMTG VST3 helper function not found. SDK may not be properly configured.")
-endif()
-
-# Ensure we capture the output
+message(STATUS "=== CarouselReverb VST3 Plugin Configured ===")
+message(STATUS "Target: carouselreverb")
+message(STATUS "Package Name: Carousel Reverb")
 if(TARGET carouselreverb)
-    message(STATUS "CarouselReverb plugin target configured")
-    message(STATUS "Plugin output directory: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+    message(STATUS "Plugin target successfully created")
+    get_target_property(PLUGIN_PACKAGE_PATH carouselreverb SMTG_PLUGIN_PACKAGE_PATH)
+    if(PLUGIN_PACKAGE_PATH)
+        message(STATUS "Plugin output: ${PLUGIN_PACKAGE_PATH}")
+    endif()
 else()
-    message(FATAL_ERROR "Failed to create carouselreverb target")
+    message(FATAL_ERROR "Failed to create plugin target")
 endif()
