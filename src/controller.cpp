@@ -7,6 +7,9 @@ namespace CarouselReverb {
 using namespace Steinberg;
 using namespace VSTGUI;
 
+// Define class IDs
+DEF_CLASS_IID(Controller)
+
 IMPLEMENT_REFCOUNT(Controller)
 
 Controller::Controller() {

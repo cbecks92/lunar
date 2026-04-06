@@ -8,10 +8,13 @@ namespace CarouselReverb {
 
 using namespace Steinberg;
 
+// Define class IDs for processor and controller
+DEF_CLASS_IID(Processor)
+
 IMPLEMENT_REFCOUNT(Processor)
 
 Processor::Processor() {
-    setControllerClass(Vst::ControllerClassIID(0x87654321));
+    setControllerClass(ControllerUID);
     mReverb = std::make_unique<CarouselReverb>();
     mLFO = std::make_unique<LFOEngine>();
 }

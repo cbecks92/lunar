@@ -1,67 +1,34 @@
-#include "pluginterfaces/vst/ivstcomponent.h"
-#include "pluginterfaces/vst/ivstaudioprocessor.h"
-#include "base/source/fobject.h"
+#include "pluginterfaces/base/ipluginbase.h"
+#include "public.sdk/source/main/pluginfactory.h"
 #include "processor.h"
 #include "controller.h"
 #include "constants.h"
 
-namespace CarouselReverb {
-
 using namespace Steinberg;
+using namespace Steinberg::Vst;
 
-// Define class IDs
-DEF_CLASS_IID(Processor)
-DEF_CLASS_IID(Controller)
+BEGIN_FACTORY_DEF(CarouselReverb::PLUGIN_VENDOR,
+                  CarouselReverb::PLUGIN_URL,
+                  CarouselReverb::PLUGIN_EMAIL)
 
-} // namespace CarouselReverb
+    DEF_CLASS2(INLINE_UID_FROM_FUID(CarouselReverb::ProcessorUID),
+               PClassInfo::kManyInstances,
+               kAudioEffectClass,
+               CarouselReverb::PLUGIN_NAME,
+               Vst::kDistributable,
+               CarouselReverb::PLUGIN_SUBCATEGORY,
+               CarouselReverb::PLUGIN_VERSION,
+               kVstVersionString,
+               CarouselReverb::Processor::createInstance)
 
-// Entry point for the plugin
-bool InitModule() {
-    return true;
-}
+    DEF_CLASS2(INLINE_UID_FROM_FUID(CarouselReverb::ControllerUID),
+               PClassInfo::kManyInstances,
+               kEditControllerClass,
+               CarouselReverb::PLUGIN_NAME " Controller",
+               0,
+               "",
+               CarouselReverb::PLUGIN_VERSION,
+               kVstVersionString,
+               CarouselReverb::Controller::createInstance)
 
-bool DeinitModule() {
-    return true;
-}
-
-extern "C" {
-
-// EXPORT statement for Windows DLL
-#ifdef _WIN32
-    #define PLUGIN_EXPORT __declspec(dllexport)
-#else
-    #define PLUGIN_EXPORT
-#endif
-
-// Factory method
-PLUGIN_EXPORT Steinberg::IPluginFactory* PLUGIN_API GetPluginFactory() {
-    static Steinberg::FClassFactory factory;
-    
-    factory.registerClass(
-        Steinberg::Vst::ProcessorClassIID(),
-        Steinberg::PClassInfo::kNoFlags,
-        Steinberg::Vst::ControllerClassIID(),
-        CarouselReverb::PLUGIN_NAME,
-        Steinberg::Vst::kDistributable,
-        CarouselReverb::PLUGIN_VENDOR,
-        CarouselReverb::PLUGIN_URL,
-        CarouselReverb::PLUGIN_VERSION,
-        CarouselReverb::Processor::createInstance
-    );
-
-    factory.registerClass(
-        Steinberg::Vst::ControllerClassIID(),
-        Steinberg::PClassInfo::kNoFlags,
-        0,
-        CarouselReverb::PLUGIN_NAME,
-        Steinberg::Vst::kDistributable,
-        CarouselReverb::PLUGIN_VENDOR,
-        CarouselReverb::PLUGIN_URL,
-        CarouselReverb::PLUGIN_VERSION,
-        CarouselReverb::Controller::createInstance
-    );
-
-    return &factory;
-}
-
-} // extern "C"
+END_FACTORY

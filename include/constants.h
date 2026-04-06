@@ -1,17 +1,25 @@
 #pragma once
 
+#include "pluginterfaces/base/ftypes.h"
+
 namespace CarouselReverb {
+
+using namespace Steinberg;
 
 // Plugin Info
 constexpr const char* PLUGIN_NAME = "Carousel Reverb";
 constexpr const char* PLUGIN_VENDOR = "Looner";
 constexpr const char* PLUGIN_VERSION = "1.0.0";
 constexpr const char* PLUGIN_URL = "https://looner.dev";
+constexpr const char* PLUGIN_EMAIL = "info@looner.dev";
+constexpr const char* PLUGIN_SUBCATEGORY = "Fx|Reverb";
 
-// GUID for VST 3
-// These must be unique for your plugin
-constexpr int32_t PROCESSOR_UID = 0x12345678;
-constexpr int32_t CONTROLLER_UID = 0x87654321;
+// Plugin IDs - Each must be globally unique
+// Format: 4 bytes: each byte represents one hex digit
+// These are FUID (128-bit) but we'll use simplified version
+// In real code, use INLINE_UID_FROM_FUID for actual UIDs
+static const FUID ProcessorUID(0x12345678, 0x9ABCDEF0, 0x11223344, 0x55667788);
+static const FUID ControllerUID(0x87654321, 0xF0EDCBA9, 0x44332211, 0x88776655);
 
 // Audio Parameters
 constexpr float DEFAULT_DECAY_TIME = 2.0f;  // seconds
