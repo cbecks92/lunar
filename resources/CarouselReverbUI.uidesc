@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vstgui-description version="1">
+    <!-- Carousel Reverb UI Definition - Retro Futuristic Theme -->
+    
+    <template name="CarouselReverbUI" size="800, 600" background-color="rgb(15, 18, 25)" 
+              background-color-draw-style="filled">
+        
+        <!-- Title Banner -->
+        <text-label title="CAROUSEL REVERB" 
+                   position="100, 20, 700, 50"
+                   font-name="Courier"
+                   font-size="18.0"
+                   text-color="rgb(0, 200, 255)"
+                   text-alignment="center">
+        </text-label>
+        
+        <!-- Subtitle -->
+        <text-label title="Ancient Future Engine • Wankel Rotary Modulation"
+                   position="100, 45, 700, 60"
+                   font-name="Courier"
+                   font-size="9.0"
+                   text-color="rgb(100, 150, 180)">
+        </text-label>
+        
+        <!-- TOP ROW: Core Reverb Parameters -->
+        <text-label title="DECAY TIME" 
+                   position="80, 90, 180, 105"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(0, 255, 100)">
+        </text-label>
+        <knob position="80, 110, 180, 200" 
+              mouse-enabled="true"
+              parameter-tag="0">
+        </knob>
+        <text-label title="WET / DRY"
+                   position="220, 90, 320, 105"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(255, 150, 0)">
+        </text-label>
+        <knob position="220, 110, 320, 200"
+              mouse-enabled="true"
+              parameter-tag="1">
+        </knob>
+        <text-label title="TEMPO SYNC"
+                   position="360, 90, 460, 105"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(0, 200, 255)">
+        </text-label>
+        <knob position="360, 110, 460, 200"
+              mouse-enabled="true"
+              parameter-tag="2">
+        </knob>
+        <text-label title="CROSSFADE"
+                   position="500, 90, 600, 105"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(255, 150, 0)">
+        </text-label>
+        <knob position="500, 110, 600, 200"
+              mouse-enabled="true"
+              parameter-tag="3">
+        </knob>
+        
+        <!-- MIDDLE ROW: Layer & Rotor Control -->
+        <text-label title="LAYER COUNT"
+                   position="80, 240, 180, 255"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(0, 255, 100)">
+        </text-label>
+        <knob position="80, 260, 180, 350"
+              mouse-enabled="true"
+              parameter-tag="4">
+        </knob>
+        <text-label title="FEEDBACK"
+                   position="220, 240, 320, 255"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(255, 150, 0)">
+        </text-label>
+        <knob position="220, 260, 320, 350"
+              mouse-enabled="true"
+              parameter-tag="5">
+        </knob>
+        
+        <!-- Wankel Rotor Section -->
+        <text-label title="⚙ WANKEL ROTOR ⚙"
+                   position="360, 220, 600, 245"
+                   font-name="Courier"
+                   font-size="12.0"
+                   text-color="rgb(0, 200, 255)"
+                   text-alignment="center">
+        </text-label>
+        
+        <text-label title="ROTOR SPEED"
+                   position="360, 240, 460, 255"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(0, 255, 100)">
+        </text-label>
+        <knob position="360, 260, 460, 350"
+              mouse-enabled="true"
+              parameter-tag="6">
+        </knob>
+        <text-label title="ROTOR DEPTH"
+                   position="500, 240, 600, 255"
+                   font-name="Courier"
+                   font-size="10.0"
+                   text-color="rgb(255, 150, 0)">
+        </text-label>
+        <knob position="500, 260, 600, 350"
+              mouse-enabled="true"
+              parameter-tag="7">
+        </knob>
+        
+        <!-- Footer Info -->
+        <text-label title="🟢 LOONER 🟢 • Carousel Reverb v1.0 • Powered by Ancient Technology"
+                   position="50, 550, 750, 575"
+                   font-name="Courier"
+                   font-size="8.0"
+                   text-color="rgb(0, 255, 100)"
+                   text-alignment="center">
+        </text-label>
+        
+    </template>
+    
+</vstgui-description>
