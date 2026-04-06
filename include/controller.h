@@ -5,7 +5,6 @@
 #include "pluginterfaces/base/fstring.h"
 #include "base/source/fobject.h"
 #include "constants.h"
-#include "vstgui/plugin-bindings/vst3editor.h"
 
 namespace CarouselReverb {
 
@@ -25,8 +24,6 @@ public:
     tresult PLUGIN_API setComponentState(IBStream* state) SMTG_OVERRIDE;
     tresult PLUGIN_API getParameterInfo(int32 paramIndex, 
                                         Vst::ParameterInfo& info) SMTG_OVERRIDE;
-
-    IPlugView* PLUGIN_API createView(const char* name) SMTG_OVERRIDE;
 
     // IUnitInfo
     int32 PLUGIN_API getUnitCount() SMTG_OVERRIDE { return 1; }

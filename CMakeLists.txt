@@ -24,7 +24,6 @@ set(PLUGIN_SOURCES
     src/controller.cpp
     src/entry.cpp
     src/lfo.cpp
-    controller/editor.cpp
 )
 
 set(PLUGIN_HEADERS
@@ -32,7 +31,7 @@ set(PLUGIN_HEADERS
     include/controller.h
     include/constants.h
     include/carousel.h
-    controller/editor.h
+    include/lfo.h
 )
 
 # Create VST 3 plugin
@@ -43,11 +42,6 @@ target_include_directories(carouselreverb PRIVATE include)
 # Link VST 3 framework
 if(TARGET sdk)
     target_link_libraries(carouselreverb PRIVATE sdk)
-endif()
-
-# Link VSTGUI
-if(TARGET vstgui)
-    target_link_libraries(carouselreverb PRIVATE vstgui)
 endif()
 
 # Platform-specific settings

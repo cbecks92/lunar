@@ -1,6 +1,5 @@
 #include "controller.h"
 #include "pluginterfaces/vst/ivstcomponent.h"
-#include "vstgui/plugin-bindings/vst3editor.h"
 #include <cstring>
 
 namespace CarouselReverb {
@@ -107,13 +106,6 @@ tresult PLUGIN_API Controller::getUnitInfo(int32 unitIndex,
     info.programListId = kNoProgramListId;
     UString(info.name, 128).fromAscii("Carousel Reverb");
     return kResultTrue;
-}
-
-IPlugView* PLUGIN_API Controller::createView(const char* name) {
-    if (strcmp(name, "editor") == 0) {
-        return new VST3Editor(this, "CarouselReverbUI", "CarouselReverbUI.uidesc");
-    }
-    return nullptr;
 }
 
 void Controller::addParameter(const char* title, const char* units,
