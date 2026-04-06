@@ -47,6 +47,25 @@ tresult PLUGIN_API Controller::initialize(FUnknown* context) {
     addParameter(STR16("Rotary Depth"), STR16(""), 
                  DEFAULT_ROTARY_DEPTH, 0.0, 1.0, 100);
 
+    // LFO Parameters
+    addParameter(STR16("LFO Rate"), STR16("Hz"), 
+                 (1.0f - 0.1f) / 9.9f, 0.0, 1.0, 100);
+    
+    addParameter(STR16("LFO Depth"), STR16(""), 
+                 0.5f, 0.0, 1.0, 100);
+    
+    addParameter(STR16("LFO Waveform"), STR16(""), 
+                 0.0, 0.0, 1.0, 4);  // 0=sine, 1=tri, 2=saw, 3=sq, 4=rand
+    
+    addParameter(STR16("LFO Tempo Sync"), STR16(""), 
+                 0.0, 0.0, 1.0, 1);  // On/Off toggle
+    
+    addParameter(STR16("LFO Target"), STR16(""), 
+                 0.0, 0.0, 1.0, 7);  // 0-7 for 8 parameters
+    
+    addParameter(STR16("LFO Enable"), STR16(""), 
+                 0.0, 0.0, 1.0, 1);  // On/Off toggle
+
     return kResultTrue;
 }
 

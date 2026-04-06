@@ -2,7 +2,7 @@
 <vstgui-description version="1">
     <!-- Carousel Reverb UI Definition - Retro Futuristic Theme -->
     
-    <template name="CarouselReverbUI" size="800, 600" background-color="rgb(15, 18, 25)" 
+    <template name="CarouselReverbUI" size="800, 650" background-color="rgb(15, 18, 25)" 
               background-color-draw-style="filled">
         
         <!-- Title Banner -->
@@ -116,9 +116,73 @@
               parameter-tag="7">
         </knob>
         
+        <!-- LFO Section -->
+        <text-label title="◈ LFO MODULATION ENGINE ◈"
+                   position="50, 390, 750, 415"
+                   font-name="Courier"
+                   font-size="12.0"
+                   text-color="rgb(255, 150, 0)"
+                   text-alignment="center">
+        </text-label>
+        
+        <text-label title="LFO ENABLE"
+                   position="80, 430, 150, 445"
+                   font-name="Courier"
+                   font-size="9.0"
+                   text-color="rgb(0, 255, 100)">
+        </text-label>
+        <knob position="80, 445, 150, 510"
+              mouse-enabled="true"
+              parameter-tag="13">
+        </knob>
+        
+        <text-label title="LFO RATE"
+                   position="170, 430, 270, 445"
+                   font-name="Courier"
+                   font-size="9.0"
+                   text-color="rgb(0, 200, 255)">
+        </text-label>
+        <knob position="170, 445, 270, 510"
+              mouse-enabled="true"
+              parameter-tag="8">
+        </knob>
+        
+        <text-label title="LFO DEPTH"
+                   position="290, 430, 390, 445"
+                   font-name="Courier"
+                   font-size="9.0"
+                   text-color="rgb(255, 150, 0)">
+        </text-label>
+        <knob position="290, 445, 390, 510"
+              mouse-enabled="true"
+              parameter-tag="9">
+        </knob>
+        
+        <text-label title="LFO WAVEFORM"
+                   position="410, 430, 510, 445"
+                   font-name="Courier"
+                   font-size="9.0"
+                   text-color="rgb(0, 255, 100)">
+        </text-label>
+        <knob position="410, 445, 510, 510"
+              mouse-enabled="true"
+              parameter-tag="10">
+        </knob>
+        
+        <text-label title="LFO TARGET"
+                   position="530, 430, 630, 445"
+                   font-name="Courier"
+                   font-size="9.0"
+                   text-color="rgb(255, 150, 0)">
+        </text-label>
+        <knob position="530, 445, 630, 510"
+              mouse-enabled="true"
+              parameter-tag="12">
+        </knob>
+        
         <!-- Footer Info -->
         <text-label title="🟢 LOONER 🟢 • Carousel Reverb v1.0 • Powered by Ancient Technology"
-                   position="50, 550, 750, 575"
+                   position="50, 600, 750, 625"
                    font-name="Courier"
                    font-size="8.0"
                    text-color="rgb(0, 255, 100)"

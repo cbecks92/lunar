@@ -36,6 +36,14 @@ constexpr int32_t PARAM_FEEDBACK = 5;
 constexpr int32_t PARAM_ROTARY_SPEED = 6;
 constexpr int32_t PARAM_ROTARY_DEPTH = 7;
 
+// LFO Parameters
+constexpr int32_t PARAM_LFO_RATE = 8;
+constexpr int32_t PARAM_LFO_DEPTH = 9;
+constexpr int32_t PARAM_LFO_WAVEFORM = 10;
+constexpr int32_t PARAM_LFO_TEMPO_SYNC = 11;
+constexpr int32_t PARAM_LFO_TARGET = 12;  // Which parameter to modulate (0-7)
+constexpr int32_t PARAM_LFO_ENABLED = 13;
+
 // UI sizing
 constexpr int32_t UI_WIDTH = 800;
 constexpr int32_t UI_HEIGHT = 600;

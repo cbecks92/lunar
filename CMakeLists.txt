@@ -23,6 +23,7 @@ set(PLUGIN_SOURCES
     src/processor.cpp
     src/controller.cpp
     src/entry.cpp
+    src/lfo.cpp
     controller/editor.cpp
 )
 

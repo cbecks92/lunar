@@ -2,6 +2,7 @@
 #include "pluginterfaces/vst/ivstevents.h"
 #include "pluginterfaces/vst/vstpresetkeys.h"
 #include <cmath>
+#include <algorithm>
 
 namespace CarouselReverb {
 
@@ -12,6 +13,7 @@ IMPLEMENT_REFCOUNT(Processor)
 Processor::Processor() {
     setControllerClass(Vst::ControllerClassIID(0x87654321));
     mReverb = std::make_unique<CarouselReverb>();
+    mLFO = std::make_unique<LFOEngine>();
 }
 
 Processor::~Processor() {}
@@ -25,9 +27,12 @@ tresult PLUGIN_API Processor::initialize(FUnknown* context) {
     addAudioInput(STR16("Audio In"), Vst::SpeakerArr::kStereo);
     addAudioOutput(STR16("Audio Out"), Vst::SpeakerArr::kStereo);
 
-    // Initialize reverb
+    // Initialize reverb and LFO
     if (mReverb) {
         mReverb->initialize(44100);
+    }
+    if (mLFO) {
+        mLFO->initialize(44100);
     }
 
     return kResultTrue;
@@ -108,6 +113,24 @@ void Processor::processParameterChanges(Vst::IParameterChanges* changes) {
                 case PARAM_ROTARY_DEPTH:
                     mParams.rotaryDepth = value; // 0-1.0
                     break;
+                case PARAM_LFO_RATE:
+                    mParams.lfoRate = 0.1f + (value * 9.9f); // 0.1-10 Hz
+                    break;
+                case PARAM_LFO_DEPTH:
+                    mParams.lfoDepth = value; // 0-1.0
+                    break;
+                case PARAM_LFO_WAVEFORM:
+                    mParams.lfoWaveform = static_cast<int>(value * 4.0f); // 0-4
+                    break;
+                case PARAM_LFO_TEMPO_SYNC:
+                    mParams.lfoTempoSync = value;
+                    break;
+                case PARAM_LFO_TARGET:
+                    mParams.lfoTarget = static_cast<int>(value * 7.0f); // 0-7 (8 parameters)
+                    break;
+                case PARAM_LFO_ENABLED:
+                    mParams.lfoEnabled = value;
+                    break;
             }
         }
     }
@@ -121,9 +144,41 @@ void Processor::updateTiming(double tempo, int32_t sampleRate) {
 
 void Processor::processAudio(float** inputs, float** outputs, 
                             int32_t numSamples, int32_t numChannels) {
-    if (!mReverb) return;
+    if (!mReverb || !mLFO) return;
 
     for (int32_t i = 0; i < numSamples; ++i) {
+        // Get current parameters with optional LFO modulation
+        float decayTime = mParams.decayTime;
+        float rotarySpeed = mParams.rotarySpeed;
+        float rotaryDepth = mParams.rotaryDepth;
+        
+        // Apply LFO if enabled
+        if (mParams.lfoEnabled > 0.5f) {
+            float lfoMod = mLFO->process(mParams.lfoRate, mParams.lfoDepth,
+                                        static_cast<LFOEngine::Waveform>((int)mParams.lfoWaveform),
+                                        mParams.lfoTempoSync > 0.5f);
+            
+            // Apply modulation to selected target parameter
+            int targetParam = (int)mParams.lfoTarget;
+            float modAmount = (lfoMod - 0.5f) * 2.0f;  // -1 to 1
+            
+            switch (targetParam) {
+                case PARAM_DECAY_TIME:
+                    decayTime = mParams.decayTime + (modAmount * mParams.decayTime * 0.5f);
+                    decayTime = std::clamp(decayTime, 0.1f, 5.0f);
+                    break;
+                case PARAM_ROTARY_SPEED:
+                    rotarySpeed = mParams.rotarySpeed + (modAmount * mParams.rotarySpeed * 0.5f);
+                    rotarySpeed = std::clamp(rotarySpeed, 0.1f, 2.0f);
+                    break;
+                case PARAM_ROTARY_DEPTH:
+                    rotaryDepth = mParams.rotaryDepth + (modAmount * 0.3f);
+                    rotaryDepth = std::clamp(rotaryDepth, 0.0f, 1.0f);
+                    break;
+                // Add more modulation targets as needed
+            }
+        }
+        
         // Check if we've completed a bar
         if (mSamplesPerBar > 0 && mSamplesSinceLastBar >= mSamplesPerBar) {
             mSamplesSinceLastBar = 0;
@@ -140,10 +195,10 @@ void Processor::processAudio(float** inputs, float** outputs,
             float input = inputs[ch][i];
             
             // Process through reverb with rotary effect
-            float reverbOut = mReverb->processWithRotary(input, mLastBPM, mParams.decayTime,
+            float reverbOut = mReverb->processWithRotary(input, mLastBPM, decayTime,
                                                          mParams.feedback, 
                                                          static_cast<unsigned int>(mParams.layerCount),
-                                                         mParams.rotarySpeed, mParams.rotaryDepth);
+                                                         rotarySpeed, rotaryDepth);
             
             // Mix wet/dry
             float output = input * (1.0f - mParams.wetDry) + reverbOut * mParams.wetDry;

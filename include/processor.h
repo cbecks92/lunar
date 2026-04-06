@@ -6,6 +6,7 @@
 #include "pluginterfaces/vst/ivstparameterchanges.h"
 #include "base/source/fobject.h"
 #include "carousel.h"
+#include "lfo.h"
 #include "constants.h"
 #include <vector>
 #include <memory>
@@ -49,10 +50,17 @@ private:
         float feedback = 0.5f;
         float rotarySpeed = DEFAULT_ROTARY_SPEED;
         float rotaryDepth = DEFAULT_ROTARY_DEPTH;
+        float lfoRate = 1.0f;
+        float lfoDepth = 0.5f;
+        float lfoWaveform = 0.0f;
+        float lfoTempoSync = 0.0f;
+        float lfoTarget = -1.0f;
+        float lfoEnabled = 0.0f;
     } mParams;
 
     // Audio processing
     std::unique_ptr<CarouselReverb> mReverb;
+    std::unique_ptr<LFOEngine> mLFO;
     std::vector<float> mInputBuffer;
     std::vector<float> mOutputBuffer;
 
